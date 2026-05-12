@@ -22,7 +22,7 @@ jobs:
     steps:
     - name: Apiiro API Build Scan
       run: |
-        response=$(curl -s --location 'https://app-staging.apiiro.com/rest-api/v1/buildScan/builds' \
+        scan_id=$(curl -s --location 'https://app-staging.apiiro.com/rest-api/v1/buildScan/builds' \
               --header 'Content-Type: application/json' \
               --header 'Authorization: Bearer ${{ secrets.BEARER_TOKEN }}' \
               --data '{
@@ -30,8 +30,6 @@ jobs:
                 "repositoryUrl": "https://github.com/${{ github.repository }}",
                 "buildId": "${{ github.run_id }}"
               }')
-        echo "Trigger response: $response"
-        scan_id=$(echo "$response" | jq -r '.id // .')
         echo "Scan ID: $scan_id"
         echo "SCAN_ID=$scan_id" >> $GITHUB_ENV
 
